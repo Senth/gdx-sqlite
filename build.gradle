@@ -1,0 +1,31 @@
+allprojects {
+	apply plugin: 'eclipse'
+	version = '0.2-SNAPSHOT'
+	group = 'com.badlogicgames.gdx'
+
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
+}
+
+subprojects {
+	apply plugin: 'java'
+	sourceCompatibility = 1.7
+	targetCompatibility = 1.7
+	[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+	ext {
+		gdxVersion = '1.5.4'
+	}
+
+	sourceSets.main.java.srcDirs = [ "src/" ]
+}
+
+task uploadArchives(dependsOn: [':gdx-sqlite:uploadArchives', 'gdx-sqlite-android:uploadArchives', 'gdx-sqlite-desktop:uploadArchives']) << {
+	// Does nothing
+}
+
+task install (dependsOn: ['gdx-sqlite:install', 'gdx-sqlite-android:install', 'gdx-sqlite-desktop:install']) << {
+	// Does nothing
+}

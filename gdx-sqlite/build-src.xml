@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!-- Configuration of the Ant build system to generate a Jar file --> 
+<project name="gdx-sqlite" default="create-gdx-sqlite-jar">
+  <target name="create-gdx-sqlite-jar" description="Create Jar file">
+        <jar jarfile="dist/gdx-sqlite.jar">
+        	<fileset dir="bin" />
+        </jar>
+        <jar jarfile="dist/gdx-sqlite-src.jar">
+  			<fileset dir="src" includes="**/*.java" />
+        </jar>
+  </target>
+</project>

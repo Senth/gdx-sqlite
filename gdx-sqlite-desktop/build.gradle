@@ -1,0 +1,55 @@
+apply plugin: 'maven'
+
+task sourceJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar) {
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+}
+
+artifacts {
+	archives sourceJar
+	archives javadocJar
+}
+
+configurations {
+	deployerJars
+	provided
+}
+
+sourceSets {
+	main { compileClasspath += configurations.provided }
+}
+
+dependencies {
+	compile project(':gdx-sqlite')
+	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+	runtime "org.xerial:sqlite-jdbc:3.8.10.1"
+	deployerJars 'org.apache.maven.wagon:wagon-ssh:2.2'
+}
+
+
+install  {
+	repositories.mavenInstaller {
+		pom.artifactId = project.name
+	}
+}
+
+uploadArchives {
+	repositories {
+		// Set mavenRepositoryUrl & mavenUserName inside gradle.properties
+		mavenDeployer {
+			configuration = configurations.deployerJars
+			pom.artifactId = project.name
+			repository(url: mavenRepositoryUrl + '/releases') {
+				authentication(userName: mavenUserName)
+			}
+			snapshotRepository(url: mavenRepositoryUrl + '/snapshots') {
+				authentication(userName: mavenUserName)
+			}
+		}
+	}
+}
